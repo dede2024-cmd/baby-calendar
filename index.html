@@ -456,7 +456,7 @@ function renderSchedule() {
       Number(s[i+1].t.split(":")[0]) * 60 + Number(s[i+1].t.split(":")[1]) : 24*60;
     if (nowMin >= st && nowMin < nx) { cur = i; break; }
   }
-  var ICON = {milk:"🍼", bfast:"🥟", lunch:"🥩", dinner:"🥬", sleep:"💤", play:"🌳", care:"🛁", learn:"📚"};
+  var ICON = {milk:"🍼", bfast:"🥚", lunch:"🥩", dinner:"🥬", sleep:"💤", play:"🌳", care:"🛁", learn:"📚"};
   document.getElementById("scheduleList").innerHTML = s.map(function(r, i){
     return '<div class="schedule-row'+(i===cur?' current':'')+'"><span class="schedule-time">'+r.t+'</span><span class="schedule-tag '+r.cls+'">'+(ICON[r.tag]||r.tag)+'</span><span class="schedule-desc">'+r.d+'</span></div>';
   }).join("");
@@ -483,7 +483,7 @@ function renderEdu() {
 }
 
 // ═══════════ 跑马灯 ═══════════
-var TAG_CN = {milk:"🍼", bfast:"🥟", lunch:"🥩", dinner:"🥬", care:"🧴", play:"🎯", learn:"📚", sleep:"💤"};
+var TAG_CN = {milk:"🍼", bfast:"🥚", lunch:"🥩", dinner:"🥬", care:"🧴", play:"🎯", learn:"📚", sleep:"💤"};
 
 function updateMarquee() {
   var s = getSchedule();
