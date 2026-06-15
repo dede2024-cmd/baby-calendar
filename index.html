@@ -165,10 +165,12 @@ body{
   }
   .content-wrap{
     flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;
-    display:flex;flex-direction:column;
+    display:flex;flex-direction:column;grid-template-columns:unset;
   }
-  .sched-panel{flex:1;overflow-y:auto}
-  .edu-panel{flex-shrink:0}
+  .sched-panel{flex:1 1 auto;overflow:visible;grid-column:unset}
+  .edu-panel{flex-shrink:0;grid-column:unset}
+  .sched-panel .sched-list{display:flex;flex-direction:column}
+  .sched-panel .sched-list .schedule-row{border-right:none!important}
   .section{margin:0 6px 3px;padding:6px 10px}
   .section-title{font-size:16px}
   .schedule-time{font-size:22px;min-width:70px}
