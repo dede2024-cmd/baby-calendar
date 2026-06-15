@@ -151,6 +151,39 @@ body{
   .sched-panel,.edu-panel{flex:1 1 100%}
 }
 @media (max-width:767px) {
+  /* 手机：顶部时间固定 · 中间作息滚动 · 底部跑马灯固定 */
+  body{
+    display:flex;flex-direction:column;
+    height:100dvh;overflow:hidden;padding:0;
+  }
+  .top-bar{
+    position:static;flex-shrink:0;padding:4px 12px 2px;
+  }
+  .vert-only .clock{font-size:96px}
+  .theme-strip{
+    flex-shrink:0;margin:0 6px 2px;padding:6px 10px;
+  }
+  .content-wrap{
+    flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;
+    display:flex;flex-direction:column;
+  }
+  .sched-panel{flex:1;overflow-y:auto}
+  .edu-panel{flex-shrink:0}
+  .section{margin:0 6px 3px;padding:6px 10px}
+  .section-title{font-size:16px}
+  .schedule-time{font-size:22px;min-width:70px}
+  .schedule-desc{font-size:18px}
+  .schedule-row.current .schedule-time{font-size:28px}
+  .schedule-row.current .schedule-desc{font-size:22px}
+  .marquee-wrap{
+    flex-shrink:0;padding:0 2px 2px;
+  }
+  .marquee-bar{height:66px;border-radius:10px}
+  .marquee-text{font-size:40px}
+  .signature{
+    position:absolute;bottom:72px;right:12px;
+    font-size:11px;opacity:.5;z-index:110;
+  }
   .wide-only{display:none}
 }
 
