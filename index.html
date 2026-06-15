@@ -594,7 +594,7 @@ function checkReminders() {
     var r = reminders[i];
     if (h === r.at[0] && m === r.at[1] && s >= 0 && s < 10 && !remindFired[r.tag]) {
       remindFired[r.tag] = true;
-      speakChinese(r.text, 2, 1500);
+      speakChinese(r.text, 3, 6000);
     }
   }
 }
