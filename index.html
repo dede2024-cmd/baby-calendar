@@ -637,6 +637,16 @@ setInterval(function(){
 }, 1000);
 setInterval(renderSchedule, 30000);
 setInterval(updateMarquee, 30000);
+
+// iOS Safari 语音解锁：首次触摸页面时激活 speechSynthesis
+document.addEventListener("touchstart", function iosUnlock(){
+  try {
+    var u = new SpeechSynthesisUtterance("");
+    u.volume = 0; u.lang = "zh-CN";
+    speechSynthesis.speak(u);
+  } catch(e) {}
+  document.removeEventListener("touchstart", iosUnlock);
+}, {once: true});
 </script>
 </body>
 </html>
