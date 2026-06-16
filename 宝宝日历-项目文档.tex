@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{ctexart}
+\documentclass[12pt,a4paper,fontset=fandol]{ctexart}
 
 \usepackage{geometry}
 \geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
@@ -55,7 +55,7 @@
 
 \subsection{作息时间表}
 
-按照「一苇、二杭」两个宝宝的日常节奏，内置11个时段作息项，涵盖喂奶、用餐、户外活动、午睡、早教、洗澡、入睡等。每个时段带有类型标签：
+按照「Y W、E H」两个宝宝的日常节奏，内置11个时段作息项，涵盖喂奶、用餐、户外活动、午睡、早教、洗澡、入睡等。每个时段带有类型标签：
 
 \begin{itemize}
     \item \textbf{必须}（红色）——喂奶、用餐、睡眠等固定事项
@@ -170,7 +170,7 @@
 
 \begin{lstlisting}[basicstyle=\ttfamily\small]
 calendar-server/
-|-- index.html          # 主页面（自适应深色主题，~730行）
+|-- index.html          # 主页面（自适应深色主题，约730行）
 |-- ipad2.html          # iPad 2 兼容版（浅色主题，~520行）
 |-- index.html.bak.*    # 自动备份文件
 \end{lstlisting}
@@ -294,6 +294,6 @@ var isNight = (h >= 22 || h < 6); // 22点至次日6点
 
 \section{许可证}
 
-本项目采用 MIT 许可证，可自由使用、修改和分发。
+本项目由\textbf{苇杭}开发，采用 MIT 许可证，可自由使用、修改和分发。
 
 \end{document}
