@@ -1,0 +1,299 @@
+\documentclass[12pt,a4paper]{ctexart}
+
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{宝宝日历 · 智能育儿看板}
+\fancyhead[R]{项目文档}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{\textbf{宝宝日历 · 智能育儿看板}\\[4pt]\large 项目文档 v2.1}
+\author{dede2024-cmd}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{项目概述}
+
+宝宝日历（Baby Calendar）是一个专为婴幼儿家庭设计的智能育儿看板，以 HTML 单页应用形式运行，无需安装任何 App。它在一块屏幕（iPad / 手机 / 平板 / 电脑桌面）上集中展示\textbf{作息时间表、早教主题、天气信息}三大模块，并支持夜间自动切换极简模式。
+
+项目完全免费开源，部署在 GitHub Pages 上，任何能打开浏览器的设备均可使用。
+
+\subsection{核心用户}
+
+\begin{itemize}
+    \item 带孩子的\textbf{阿姨、保姆、祖辈}——抬眼即知当前该做什么
+    \item 孩子\textbf{父母}——远程了解家中日程安排
+    \item 家庭中的\textbf{多设备场景}——不同房间的屏幕各取所需
+\end{itemize}
+
+\subsection{项目地址}
+
+\begin{itemize}
+    \item 主仓库：\url{https://github.com/dede2024-cmd/baby-calendar}
+    \item 桌面版仓库：\url{https://github.com/dede2024-cmd/baby-calendar-desktop}
+    \item 在线访问：\url{https://dede2024-cmd.github.io/baby-calendar/}
+\end{itemize}
+
+\section{功能特性}
+
+\subsection{作息时间表}
+
+按照「一苇、二杭」两个宝宝的日常节奏，内置11个时段作息项，涵盖喂奶、用餐、户外活动、午睡、早教、洗澡、入睡等。每个时段带有类型标签：
+
+\begin{itemize}
+    \item \textbf{必须}（红色）——喂奶、用餐、睡眠等固定事项
+    \item \textbf{灵活}（黄色）——户外活动等可调整事项
+    \item \textbf{早教}（紫色）——主题早教时段
+    \item \textbf{建议}（绿色）——洗澡等日常护理
+\end{itemize}
+
+\textbf{当前时间段自动高亮}，视觉上清晰区分「现在该做什么」。
+
+\subsection{今日早教主题}
+
+按星期轮换7大主题：
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{cll}
+\toprule
+\textbf{星期} & \textbf{主题} & \textbf{能力培养} \\
+\midrule
+日 & 亲子时光 & 情感联结、安全感 \\
+一 & 颜色认知 & 视觉辨识、分类能力 \\
+二 & 动物世界 & 认知记忆、语言模仿 \\
+三 & 身体认知 & 自我意识、语言表达 \\
+四 & 音乐律动 & 节奏感知、大运动协调 \\
+五 & 自然探索 & 感官体验、观察力 \\
+六 & 生活技能 & 自理能力、秩序感 \\
+\bottomrule
+\end{tabular}
+\caption{早教主题轮换表}
+\end{table}
+
+每个主题配有4个具体活动卡片，分别对应早晨、户外、主题早教时段、睡前四个场景。
+
+\subsection{实时天气}
+
+接入 Open-Meteo 免费天气 API，展示合肥市庐阳区的天气信息：
+
+\begin{itemize}
+    \item 当前室外气温（每10分钟自动刷新）
+    \item 当日最高温 / 最低温
+    \item 天气状况（晴/多云/雨等，含对应 emoji 图标）
+    \item 降水概率
+\end{itemize}
+
+\subsection{夜间模式（22:00—次日 6:00）}
+
+晚上10点后自动切换至极简夜间模式：
+
+\begin{itemize}
+    \item 只显示\textbf{当前室外温度 + 时间}，居中超大字体
+    \item 夜间主题为深黑色背景（\#020202）+ 暗灰色文字，不刺眼
+    \item 作息表和早教内容全部隐藏
+    \item 早上6点自动恢复完整显示
+\end{itemize}
+
+\subsection{多设备自适应}
+
+通过 CSS 媒体查询实现单个网页适配所有设备：
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{p{2.5cm}p{3cm}p{4cm}}
+\toprule
+\textbf{设备类型} & \textbf{分辨率} & \textbf{触发布局} \\
+\midrule
+1K 平板（iPad 3） & 1024×768 & 横屏5栏顶栏 + 3栏内容区 \\
+2K 平板（iPad Pro） & 2048×1536+ & 同上，字体等比适配 \\
+手机（荣耀/华为） & ～390×844 & 竖屏窄版，垂直堆叠布局 \\
+桌面浏览器 & 任意 & 横屏大屏，信息密度最高 \\
+\bottomrule
+\end{tabular}
+\caption{设备适配表}
+\end{table}
+
+\subsection{iPad 2 专用版}
+
+针对 iPad 2（iOS 9.3.5，Safari 版本老旧）提供独立兼容版本：
+
+\begin{itemize}
+    \item 全部使用传统 JavaScript（无 ES6+ 语法）和基础 CSS（无变量、无 flexbox）
+    \item 浅色主题（\#fffdf7 米白背景）
+    \item 固定 1024×768 布局
+    \item 访问地址：\texttt{ipad2.html}
+\end{itemize}
+
+\subsection{桌面壁纸模式}
+
+通过 Plash（macOS）或 Lively Wallpaper（Windows）可将日历设为桌面壁纸，开机自启、常驻显示。
+
+\section{技术架构}
+
+\subsection{技术栈}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{llp{5.5cm}}
+\toprule
+\textbf{层} & \textbf{技术} & \textbf{说明} \\
+\midrule
+前端框架 & 无（原生 HTML/CSS/JS） & 单文件，零依赖，加载极快 \\
+天气数据 & Open-Meteo API & 免费、无需注册、全球覆盖 \\
+部署 & GitHub Pages & 免费静态托管，自动 HTTPS \\
+本地服务 & Python HTTP Server & 可选，局域网直连 \\
+壁纸引擎 & Plash / Lively Wallpaper & 将网页设为操作系统壁纸 \\
+\bottomrule
+\end{tabular}
+\caption{技术栈一览}
+\end{table}
+
+\subsection{代码结构}
+
+\begin{lstlisting}[basicstyle=\ttfamily\small]
+calendar-server/
+|-- index.html          # 主页面（自适应深色主题，~730行）
+|-- ipad2.html          # iPad 2 兼容版（浅色主题，~520行）
+|-- index.html.bak.*    # 自动备份文件
+\end{lstlisting}
+
+主页面核心逻辑：
+
+\begin{itemize}
+    \item \textbf{天气获取}：\texttt{fetchWeather()} 通过 Open-Meteo API 异步拉取，每10分钟刷新
+    \item \textbf{夜间检测}：\texttt{checkNightMode()} 每秒检查当前时间，切换 CSS 类
+    \item \textbf{作息高亮}：\texttt{renderSchedule()} 根据当前时间匹配作息项
+    \item \textbf{主题轮换}：\texttt{renderEdu()} 根据星期几选择对应早教主题
+\end{itemize}
+
+\subsection{浏览器兼容性}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{浏览器} & \textbf{主版本} & \textbf{iPad 2 版} \\
+\midrule
+Safari 14+（iOS 14+） & \checkmark & — \\
+Safari 9（iOS 9） & × & \checkmark \\
+Chrome 80+ & \checkmark & \checkmark \\
+Firefox 80+ & \checkmark & \checkmark \\
+Edge 80+ & \checkmark & \checkmark \\
+微信内置浏览器 & \checkmark & \checkmark \\
+\bottomrule
+\end{tabular}
+\caption{浏览器兼容性矩阵}
+\end{table}
+
+\section{部署指南}
+
+\subsection{GitHub Pages 部署（推荐）}
+
+无需任何服务器，GitHub 免费托管，自动 HTTPS：
+
+\begin{enumerate}
+    \item 将 \texttt{index.html} 上传至 GitHub 仓库根目录
+    \item 仓库 Settings → Pages → Source 选择 \texttt{main} 分支 → 保存
+    \item 等待1—2分钟，访问 \texttt{https://用户名.github.io/仓库名/}
+\end{enumerate}
+
+\subsection{局域网部署}
+
+在家里的 Mac 上启动本地服务：
+
+\begin{lstlisting}[basicstyle=\ttfamily\small]
+cd ~/calendar-server
+python3 -m http.server 8080 --bind 0.0.0.0
+\end{lstlisting}
+
+访问地址：\texttt{http://[Mac的局域网IP]:8080/index.html}
+
+\subsection{各设备访问方式}
+
+\begin{itemize}
+    \item \textbf{iPad / iPhone}：Safari 打开 → 底部「分享」→「添加到主屏幕」
+    \item \textbf{安卓手机}：Chrome 打开 → 右上角 ⋮ →「添加到主屏幕」
+    \item \textbf{macOS 桌面壁纸}：安装 Plash → Add Website → 输入桌面版地址
+    \item \textbf{Windows 桌面壁纸}：安装 Lively Wallpaper → 添加网址
+\end{itemize}
+
+\section{定制指南}
+
+\subsection{修改作息时间}
+
+编辑 \texttt{index.html} 中的 \texttt{schedule} 数组：
+
+\begin{lstlisting}[basicstyle=\ttfamily\small]
+{ time: "08:40", task: "早餐：鸡蛋 + 粥", type: "red", range: [8,40] }
+\end{lstlisting}
+
+\texttt{type} 取值：\texttt{red}（必须）/\texttt{yellow}（灵活）/\texttt{green}（建议）/\texttt{purple}（早教）。
+
+\subsection{修改早教主题}
+
+编辑 \texttt{eduData} 数组，每天一个主题对象，含 \texttt{title}、\texttt{ability}、\texttt{activities}。
+
+\subsection{修改天气城市}
+
+修改 JS 中的经纬度常量：
+
+\begin{lstlisting}[basicstyle=\ttfamily\small]
+const LAT = 31.878, LON = 117.265, CITY = "合肥·庐阳";
+\end{lstlisting}
+
+\subsection{调整夜间模式时间}
+
+在 \texttt{checkNightMode()} 函数中修改判断条件：
+
+\begin{lstlisting}[basicstyle=\ttfamily\small]
+var isNight = (h >= 22 || h < 6); // 22点至次日6点
+\end{lstlisting}
+
+\section{常见问题}
+
+\begin{description}
+    \item[Q：天气数据不显示？] A：检查网络是否连通。页面会显示默认温度（25°C）作为兜底。
+    \item[Q：iPad 上地址栏去不掉？] A：必须通过「添加到主屏幕」方式打开才会全屏。
+    \item[Q：老 iPad 显示白屏？] A：使用 \texttt{ipad2.html} 专用版，兼容 iOS 9。
+    \item[Q：如何同时更新多个仓库？] A：\texttt{baby-calendar} 和 \texttt{baby-calendar-desktop} 需同步更新。
+\end{description}
+
+\section{版本历史}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{cll}
+\toprule
+\textbf{日期} & \textbf{版本} & \textbf{更新内容} \\
+\midrule
+2026-06-16 & v2.1 & 新增庐阳区天气、夜间模式、iPad 2 专用版 \\
+2026-06-15 & v2.0 & 深色主题、多栏自适应布局、跑马灯 \\
+2026-06-09 & v1.0 & 初始版本，浅色主题固定布局 \\
+\bottomrule
+\end{tabular}
+\caption{版本历史}
+\end{table}
+
+\section{许可证}
+
+本项目采用 MIT 许可证，可自由使用、修改和分发。
+
+\end{document}
