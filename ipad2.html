@@ -23,14 +23,37 @@ body{background:#0A0A0A;color:#EEE;font-family:-apple-system,'Helvetica Neue',sa
 .c-white{color:#EEE}
 
 /* ====== 夜间模式 ====== */
-.night-screen{display:none;position:fixed;inset:0;z-index:9999;background:#050505;
-  text-align:center}
-body.night-mode .night-screen{display:block}
+.night-screen{display:none;position:fixed;inset:0;z-index:9999;background:#050505}
+body.night-mode .night-screen{display:table;width:100%;height:100%}
+.night-screen-inner{display:none}
+body.night-mode .night-screen{display:table}
+body.night-mode .night-screen-inner{display:table-cell;vertical-align:middle;text-align:center}
 body.night-mode .day-content{display:none}
-.night-temp{font-size:160px;font-weight:900;color:#FFF;line-height:1;margin-top:12vh}
-.night-time{font-size:72px;font-weight:900;color:#FACC15;margin-top:20px}
-.night-label{font-size:36px;color:#888;margin-top:16px}
-.night-city{font-size:24px;color:#555;margin-top:12px}
+.night-temp{font-size:112px;font-weight:900;color:#666;line-height:1}
+.night-time{font-size:160px;font-weight:900;color:#AAA;line-height:1.1;letter-spacing:4px}
+.night-ctrl{margin-top:24px}
+.night-ctrl .ctrl-btn{
+  display:inline-block;width:60px;height:60px;line-height:58px;
+  background:#222;color:#666;border:2px solid #444;border-radius:12px;
+  font-size:30px;font-weight:900;text-align:center;margin:0 8px;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent
+}
+.night-ctrl .ctrl-btn:active{background:#444;color:#AAA;border-color:#666}
+
+/* 白天亮度按钮（右下角） */
+.ctrl-panel{
+  position:fixed;bottom:12px;right:12px;z-index:200;
+  opacity:0.4;transition:opacity .3s;
+}
+.ctrl-panel:active{opacity:0.85}
+body.night-mode .ctrl-panel{display:none}
+.ctrl-panel .ctrl-btn{
+  display:inline-block;width:38px;height:38px;line-height:36px;
+  background:rgba(10,10,10,.88);color:#999;border:1px solid #555;border-radius:10px;
+  font-size:20px;font-weight:900;text-align:center;margin-left:4px;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent
+}
+.ctrl-panel .ctrl-btn:active{background:#333;color:#FFF;border-color:#999}
 
 /* ====== 白天内容容器 ====== */
 .day-content{height:100vh;display:table;width:100%;table-layout:fixed}
@@ -145,10 +168,14 @@ body.night-mode .day-content{display:none}
 
 <!-- ══════ 夜间 ══════ -->
 <div class="night-screen">
-  <div class="night-temp" id="nightTemp">--°</div>
-  <div class="night-time" id="nightTime">--:--</div>
-  <div class="night-label" id="nightLabel">--</div>
-  <div class="night-city">合肥 · 庐阳</div>
+  <div class="night-screen-inner">
+    <div class="night-time" id="nightTime">--:--</div>
+    <div class="night-temp" id="nightTemp">--°</div>
+    <div class="night-ctrl">
+      <span class="ctrl-btn" id="nightBriDown">暗</span>
+      <span class="ctrl-btn" id="nightBriUp">亮</span>
+    </div>
+  </div>
 </div>
 
 <!-- ══════ 白天 ══════ -->
@@ -250,7 +277,7 @@ var WDESC = {
 };
 
 function pad2(n) { return (n < 10 ? "0" : "") + n; }
-function fmtTemp(v) { return (v !== null && v !== undefined) ? v.toFixed(1) : "--"; }
+function fmtTemp(v) { return (typeof v === 'number' && !isNaN(v)) ? v.toFixed(1) : "--"; }
 
 function fetchWeather() {
   var xhr = new XMLHttpRequest();
@@ -306,19 +333,21 @@ function updateNightScreen() {
   var nt = document.getElementById("nightTime");
   if (!nt) return;
   var d = new Date();
-  nt.textContent = pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+  nt.textContent = pad2(d.getHours()) + ":" + pad2(d.getMinutes()) + ":" + pad2(d.getSeconds());
 
   var w = weatherCache;
   var elTemp = document.getElementById("nightTemp");
-  var elLabel = document.getElementById("nightLabel");
-  if (elTemp) elTemp.textContent = fmtTemp(w.now) + "°";
-  if (elLabel) elLabel.textContent = w.desc;
+  if (elTemp) {
+    var t = (typeof w.now === 'number' && !isNaN(w.now)) ? w.now.toFixed(1) : "--";
+    elTemp.innerHTML = "<span style='font-size:0.22em;font-weight:400'>室外：</span>" + t + "°";
+  }
 }
 
 // ========== 夜间模式 ==========
 function checkNightMode() {
+  var forceNight = location.search.indexOf('night') !== -1;
   var h = new Date().getHours();
-  document.body.className = (h >= 22 || h < 6) ? "night-mode" : "";
+  document.body.className = (forceNight || h >= 22 || h < 6) ? "night-mode" : "";
 }
 
 // ========== 作息数据 ==========
@@ -556,5 +585,40 @@ document.addEventListener("touchstart", function iosUnlock() {
   } catch(e) {}
   document.removeEventListener("touchstart", iosUnlock);
 }, { once: true });
+</script>
+<div class="ctrl-panel" id="ctrlPanel">
+  <span class="ctrl-btn" id="btnBriDown" title="调暗">🌙</span>
+  <span class="ctrl-btn" id="btnBriUp" title="调亮">☀️</span>
+</div>
+<script>
+// ═══════════ 亮度调节（白天/夜间独立存储）═══════════
+var _bbKey = document.body.classList.contains('night-mode') ? 'bbCalNightBrightness' : 'bbCalBrightness';
+var _bbBri = parseFloat(localStorage.getItem(_bbKey)) || 1;
+function _bbApplyBri(v) {
+  _bbBri = Math.max(0.3, Math.min(1.5, v));
+  document.body.style.filter = 'brightness(' + _bbBri + ')';
+  document.body.style.webkitFilter = 'brightness(' + _bbBri + ')';
+  localStorage.setItem(_bbKey, _bbBri);
+}
+_bbApplyBri(_bbBri);
+var _bbD = document.getElementById('btnBriDown');
+var _bbU = document.getElementById('btnBriUp');
+var _nbD = document.getElementById('nightBriDown');
+var _nbU = document.getElementById('nightBriUp');
+if (_bbD) _bbD.onclick = function(){ _bbApplyBri(_bbBri - 0.1); };
+if (_bbU) _bbU.onclick = function(){ _bbApplyBri(_bbBri + 0.1); };
+if (_nbD) _nbD.onclick = function(){ _bbApplyBri(_bbBri - 0.1); };
+if (_nbU) _nbU.onclick = function(){ _bbApplyBri(_bbBri + 0.1); };
+var _origCheck = checkNightMode;
+checkNightMode = function(d) {
+  var wasNight = document.body.classList.contains('night-mode');
+  _origCheck(d);
+  var isNight = document.body.classList.contains('night-mode');
+  if (isNight !== wasNight) {
+    _bbKey = isNight ? 'bbCalNightBrightness' : 'bbCalBrightness';
+    _bbBri = parseFloat(localStorage.getItem(_bbKey)) || 1;
+    _bbApplyBri(_bbBri);
+  }
+};
 </script>
 </body></html>
