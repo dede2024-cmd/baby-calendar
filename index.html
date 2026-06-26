@@ -706,7 +706,7 @@ function checkNightMode(d) {
   d = d || new Date();
   var forceNight = location.search.indexOf('night') !== -1;
   var h = d.getHours();
-  var isNight = forceNight || (h >= 22 || h < 6);
+  var isNight = forceNight || (h >= 21 || h < 6);
   if (isNight) {
     document.body.classList.add("night-mode");
     document.body.classList.remove("day-mode");
